@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: vote
-        image: pragra/vote:v1
-        imagePullPolicy: Never
+        image: pragra/vote
+        imagePullPolicy: v1
         ports:
         - containerPort: 5000
