@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vote-deploy
+  labels:
+    name: 
+spec:
+  selector:
+    matchLabels:
+      name: pragra-vote 
+  replicas: 3
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        name:  pragra-vote
+        app : pragra-vote
+    spec:
+      containers:
+      - image:  pragra/vote
+        name:  pragra-vote
+        resources:
+          requests:
+            cpu: "20m"
+            memory: "55M"
+        ports:
+        - containerPort:  80
+          name:  http-port
+        volumeMounts:
+        - mountPath: /data
+          name: data
+      volumes:
+        - name: data
+          emptyDir: {}
+      restartPolicy: Always
+      imagePullPolicy: Always
+
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name:  vote_svc
+spec:
+  selector:
+    app:  pragra-vote
+  type:  LoadBalancer
+  ports:
+  - name:  public-port
+    port:  80
+    targetPort:  80
