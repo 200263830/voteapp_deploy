@@ -1,0 +1,29 @@
+apiVersion: apps/v1 # for versions before 1.9.0 use apps/v1beta2
+kind: Deployment
+metadata:
+  name: postgre-master
+  labels:
+    app: postgre
+spec:
+  selector:
+    matchLabels:
+      app: postgre
+      role: master
+      tier: backend
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: postgre
+        role: master
+        tier: backend
+    spec:
+      containers:
+      - name: master
+        image: postgres:10.4  # or just image: postgre
+        resources:
+          requests:
+            cpu: 100m
+            memory: 100Mi
+        ports:
+        - containerPort: 5432
